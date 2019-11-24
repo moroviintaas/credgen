@@ -1,0 +1,2 @@
+# credgen
+Helps generating passwords
