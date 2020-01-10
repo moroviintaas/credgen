@@ -66,7 +66,7 @@ def ask_params():
 
     passphrase = input("Passphrase (may be a line):\t")
 
-    salt = input("Salt:\t\t\t\t")
+    salt = "0x" + input("Salt:\t\t\t\t0x")
 
     if len(salt)%2 == 1:
         salt = "0" + salt
@@ -78,6 +78,8 @@ def ask_params():
         resourcename = None
     if salt == "":
         salt = None
+
+    #print(username, resourcename, passphrase, salt)
 
     
 
@@ -106,7 +108,7 @@ if __name__ == "__main__":
     parser.add_argument("-l", "--linelength", help="Specify the number of characters in row",
                     dest="linelength", default = DEFAULT_LINE_LENGTH, type=int)
     parser.add_argument("-S", "--saltlength", help="Specify the number of bytes in salt",
-                    dest="saltlength", default = DEFAULT_SALT_LENGTH, type=int)
+                    dest="saltlength", default = None, type=int)
 
     args=parser.parse_args()
     #print(args.passphrase)
@@ -114,8 +116,16 @@ if __name__ == "__main__":
        args.resourcename == None and args.salt == None:
         print(ask_params())
     else:
+        salt = args.salt
+        if args.saltlength == None:
+            if len(salt)%2 == 1:
+                salt = "0" + salt
+            saltlength = len(salt)//2 -1
+        else:
+            saltlength = args.saltlength
+
         
         dgst = generate_password(args.passphrase, args.username, args.resourcename,\
-                               args.salt, args.saltlength)
+                               salt, saltlength)
         result = result2str(dgst, args.linelength,  args.altchars)
         print(result)
