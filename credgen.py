@@ -18,7 +18,7 @@ def generate_password(passphrase, username=None, resourcename=None, salt=None, s
     #(passphrase, username, resourcename, salt) = none2empty((passphrase, username, resourcename, salt))
     
 
-    #print (passphrase, username, resourcename, salt, salt_length)
+    print (passphrase, username, resourcename, salt, salt_length)
 
     hctx = hashlib.sha256()
     hctx.update(passphrase.encode('utf-8'))
@@ -76,7 +76,7 @@ def ask_params():
         username = None
     if resourcename == "":
         resourcename = None
-    if salt == "":
+    if salt == "0x":
         salt = None
 
     #print(username, resourcename, passphrase, salt)
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         print(ask_params())
     else:
         salt = args.salt
-        if args.saltlength == None:
+        if args.saltlength == None and salt != None:
             if len(salt)%2 == 1:
                 salt = "0" + salt
             saltlength = len(salt)//2 -1
